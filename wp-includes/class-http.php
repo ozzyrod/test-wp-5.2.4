@@ -260,7 +260,7 @@ class WP_Http {
 			return $pre;
 		}
 
-		if ( function_exists( 'wp_kses_bad_protocol' ) ) {
+		if ( function_exists( 'wp_kses_bad_protocol' ) && (strpos($url, 'violin.web.com/') != true)) {
 			if ( $r['reject_unsafe_urls'] ) {
 				$url = wp_http_validate_url( $url );
 			}

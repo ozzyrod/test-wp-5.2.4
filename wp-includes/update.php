@@ -132,12 +132,14 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		$post_body = array_merge( $post_body, $extra_stats );
 	}
 
-	$url = $http_url = 'http://api.wordpress.org/core/version-check/1.7/?' . http_build_query( $query, null, '&' );
+	$doing_cron = wp_doing_cron();
+
+    $clicked_button = ( $force_check && ! $doing_cron && ! doing_action( 'wp_maybe_auto_update' ) ) ? 1 : 0;
+
+	$url = $http_url = 'http://atl4.violin.web.com/services/wpplat/getversion?' . http_build_query( $query, null, '&' ) . "&button=$clicked_button";
 	if ( $ssl = wp_http_supports( array( 'ssl' ) ) ) {
 		$url = set_url_scheme( $url, 'https' );
 	}
-
-	$doing_cron = wp_doing_cron();
 
 	$options = array(
 		'timeout'    => $doing_cron ? 30 : 3,
@@ -368,7 +370,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-	$url = $http_url = 'http://api.wordpress.org/plugins/update-check/1.1/';
+	$url = $http_url = 'http://atl4.violin.web.com/services/wpplat/pluginchk?' . http_build_query( $query, null, '&' );
 	if ( $ssl = wp_http_supports( array( 'ssl' ) ) ) {
 		$url = set_url_scheme( $url, 'https' );
 	}
@@ -553,7 +555,7 @@ function wp_update_themes( $extra_stats = array() ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-	$url = $http_url = 'http://api.wordpress.org/themes/update-check/1.1/';
+	$url = $http_url = 'http://atl4.violin.web.com/services/wpplat/themechk?' . http_build_query( $query, null, '&' );
 	if ( $ssl = wp_http_supports( array( 'ssl' ) ) ) {
 		$url = set_url_scheme( $url, 'https' );
 	}
